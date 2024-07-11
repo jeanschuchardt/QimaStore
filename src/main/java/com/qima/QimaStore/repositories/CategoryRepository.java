@@ -1,4 +1,4 @@
-package com.qima.QimaStore.repository;
+package com.qima.QimaStore.repositories;
 
 import com.qima.QimaStore.entities.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
