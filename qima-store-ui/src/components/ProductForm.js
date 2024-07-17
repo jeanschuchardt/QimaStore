@@ -134,8 +134,13 @@ const ProductForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const updatedProduct = {
+            ...product,
+            categoryId: product.categoryChain.id,
+        };
+
         const submitFunction = id ? updateProduct : addProduct;
-        const submitArgs = id ? [id, product] : [product];
+        const submitArgs = id ? [id, updatedProduct] : [updatedProduct];
 
         submitFunction(...submitArgs)
             .then(() => navigate('/'))
