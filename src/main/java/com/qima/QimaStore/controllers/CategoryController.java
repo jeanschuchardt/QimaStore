@@ -1,7 +1,9 @@
 package com.qima.QimaStore.controllers;
 
+import com.qima.QimaStore.dtos.CategoryDTO;
 import com.qima.QimaStore.entities.Category;
 import com.qima.QimaStore.repositories.CategoryRepository;
+import com.qima.QimaStore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +15,16 @@ import java.util.Optional;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    public record UserRecord(Long id, String name) {}
+
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping
-    public List<UserRecord> getAllCategories() {
-
-        List<UserRecord> list = categoryRepository.findAll().stream().map(category -> new UserRecord(category.getId(), category.getName())).toList();
-
-        return list;
+    public List<CategoryDTO> getAllCategories() {
+        return categoryService.getAllCategories();
     }
 
     @GetMapping("/{id}")

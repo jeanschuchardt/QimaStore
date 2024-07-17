@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts } from '../services/api';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -54,8 +53,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await getProducts()
-
+                const response = await getProducts();
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -64,6 +62,22 @@ const HomePage = () => {
 
         fetchProducts();
     }, []);
+
+    const getCategoryPath = (categoryChain) => {
+        let path = [];
+        let currentCategory = categoryChain;
+
+        while (currentCategory) {
+            path.unshift(currentCategory.name);
+            if (currentCategory.subcategories.length > 0) {
+                currentCategory = currentCategory.subcategories[0];
+            } else {
+                currentCategory = null;
+            }
+        }
+
+        return path.join(' > ');
+    };
 
     return (
         <Container>
@@ -85,7 +99,7 @@ const HomePage = () => {
                         <td>{product.name}</td>
                         <td>{product.description}</td>
                         <td>{product.price}</td>
-                        <td>{product.category.name}</td>
+                        <td>{getCategoryPath(product.categoryChain)}</td>
                         <td>{product.available ? 'Yes' : 'No'}</td>
                         <td>
                             <ActionLinks>

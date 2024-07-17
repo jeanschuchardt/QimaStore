@@ -1,7 +1,9 @@
 package com.qima.QimaStore.controllers;
 
+import com.qima.QimaStore.dtos.ProductDTO;
 import com.qima.QimaStore.entities.Product;
 import com.qima.QimaStore.repositories.ProductRepository;
+import com.qima.QimaStore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,19 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductDTO> allProducts = productService.getAllProducts();
+        return ResponseEntity.ok(allProducts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO productById = productService.getProductById(id);
+        return ResponseEntity.ok(productById);
     }
 
     @PostMapping
@@ -41,7 +47,7 @@ public class ProductController {
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setPrice(productDetails.getPrice());
-            product.setCategory(productDetails.getCategory());
+//            product.setCategory(productDetails.getCategory());
             product.setAvailable(productDetails.getAvailable());
 
             final Product updatedProduct = productRepository.save(product);

@@ -20,6 +20,22 @@ const ProductDetail = () => {
         fetchProduct();
     }, [id]); // Dependência para atualizar quando 'id' muda
 
+    const getCategoryPath = (categoryChain) => {
+        let path = [];
+        let currentCategory = categoryChain;
+
+        while (currentCategory) {
+            path.unshift(currentCategory.name);
+            if (currentCategory.subcategories.length > 0) {
+                currentCategory = currentCategory.subcategories[0];
+            } else {
+                currentCategory = null;
+            }
+        }
+
+        return path.join(' > ');
+    };
+
     if (!product) return <div>Loading...</div>;
 
     return (
@@ -27,7 +43,7 @@ const ProductDetail = () => {
             <h1>{product.name}</h1>
             <p className="description">{product.description}</p>
             <p className="price">Price: ${product.price}</p>
-            <p className="category">Category: {product.category.name}</p>
+            <p className="category">Category: {getCategoryPath(product.categoryChain)}</p>
             <p className="availability">Available: {product.available ? 'Yes' : 'No'}</p>
         </div>
     );

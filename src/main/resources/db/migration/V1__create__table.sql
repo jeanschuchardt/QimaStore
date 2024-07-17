@@ -18,9 +18,11 @@ CREATE TABLE products (
 
 INSERT INTO categories (name, parent_id) VALUES ('Electronics', NULL);
 INSERT INTO categories (name, parent_id) VALUES ('Mobile Phones', 1);
+INSERT INTO categories (name, parent_id) VALUES ('Iphone', 2);
+INSERT INTO categories (name, parent_id) VALUES ('Android', 2);
 INSERT INTO categories (name, parent_id) VALUES ('Laptops', 1);
 INSERT INTO categories (name, parent_id) VALUES ('Home Appliances', NULL);
-INSERT INTO categories (name, parent_id) VALUES ('Kitchen Appliances', 4);
+INSERT INTO categories (name, parent_id) VALUES ('Kitchen Appliances', 6);
 INSERT INTO categories (name, parent_id) VALUES ('Televisions', 1);
 
 
@@ -44,3 +46,9 @@ VALUES ('Whirlpool Refrigerator', '500L capacity Whirlpool refrigerator', 499.99
 
 INSERT INTO products (name, description, price, category_id, available)
 VALUES ('Philips Blender', 'High-speed blender for smoothies and more', 79.99, 5, TRUE);
+
+INSERT INTO products (name, description, price, category_id, available)
+VALUES ('Sansung s10', 'Cell phone' , 79.99, 4, TRUE);
+
+INSERT INTO products (name, description, price, category_id, available)
+VALUES ('iphone 15', 'Cell phone' , 79.99, 3, TRUE);

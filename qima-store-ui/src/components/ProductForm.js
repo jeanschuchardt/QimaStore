@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getProductById, updateProduct } from '../services/api';
+import { getProductById, addProduct, updateProduct } from '../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -79,7 +79,7 @@ const Button = styled.button`
 `;
 
 const ProductForm = () => {
-    const [product, setProduct] = useState({ name: '', description: '', price: 0, categoryPath: '', available: false });
+    const [product, setProduct] = useState({ name: '', description: '', price: 0, categoryChain: { id: '' }, available: false });
     const [categories, setCategories] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -87,7 +87,7 @@ const ProductForm = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = getProductById(id)
+                const response = await getProductById(id);
                 setProduct(response.data);
             } catch (error) {
                 console.error('Error fetching product:', error);
@@ -114,18 +114,30 @@ const ProductForm = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setProduct(prevProduct => ({
-            ...prevProduct,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+
+        if (name === "categoryChain.id") {
+            setProduct(prevProduct => ({
+                ...prevProduct,
+                categoryChain: {
+                    ...prevProduct.categoryChain,
+                    id: value
+                }
+            }));
+        } else {
+            setProduct(prevProduct => ({
+                ...prevProduct,
+                [name]: type === 'checkbox' ? checked : value
+            }));
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const method = id ? 'put' : 'post';
-        const url = id ? `/api/products/${id}` : '/api/products';
 
-        axios[method](url, product)
+        const submitFunction = id ? updateProduct : addProduct;
+        const submitArgs = id ? [id, product] : [product];
+
+        submitFunction(...submitArgs)
             .then(() => navigate('/'))
             .catch(error => console.error('Error saving product:', error));
     };
@@ -148,7 +160,7 @@ const ProductForm = () => {
                 </FormGroup>
                 <FormGroup>
                     <Label>Category:</Label>
-                    <Select name="categoryPath" value={product.categoryPath} onChange={handleChange}>
+                    <Select name="categoryChain.id" value={product.categoryChain.id} onChange={handleChange}>
                         <option value="">Select a category</option>
                         {categories.map(category => (
                             <option key={category.id} value={category.id}>{category.name}</option>
