@@ -71,6 +71,7 @@ const Button = styled.button`
 
 const ProductForm = () => {
     const [product, setProduct] = useState({ name: '', description: '', price: 0, categoryPath: '', available: false });
+    const [categories, setCategories] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -81,6 +82,13 @@ const ProductForm = () => {
                 .catch(error => console.error('Error fetching product:', error));
         }
     }, [id]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/categories')
+            .then(response => setCategories(response.data))
+            .catch(error => console.error('Error fetching categories:', error));
+    }, []);
+
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -117,8 +125,13 @@ const ProductForm = () => {
                     <Input type="number" name="price" value={product.price} onChange={handleChange} />
                 </FormGroup>
                 <FormGroup>
-                    <Label>Category Path:</Label>
-                    <Input type="text" name="categoryPath" value={product.categoryPath} onChange={handleChange} />
+                    <Label>Category:</Label>
+                    <Select name="categoryPath" value={product.categoryPath} onChange={handleChange}>
+                        <option value="">Select a category</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                    </Select>
                 </FormGroup>
                 <FormGroup>
                     <CheckboxLabel>
