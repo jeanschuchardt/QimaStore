@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getProductById, updateProduct } from '../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -39,7 +40,7 @@ const Input = styled.input`
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 100%;
+    width: 90%;
 `;
 
 const Select = styled.select`
@@ -47,7 +48,7 @@ const Select = styled.select`
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 100%;
+    width: 95%;
 `;
 
 const CheckboxLabel = styled.label`
@@ -86,7 +87,7 @@ const ProductForm = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`/api/products/${id}`);
+                const response = getProductById(id)
                 setProduct(response.data);
             } catch (error) {
                 console.error('Error fetching product:', error);

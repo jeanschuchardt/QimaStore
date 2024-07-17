@@ -10,15 +10,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
+    public record UserRecord(Long id, String name) {}
     @Autowired
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<UserRecord> getAllCategories() {
+
+        List<UserRecord> list = categoryRepository.findAll().stream().map(category -> new UserRecord(category.getId(), category.getName())).toList();
+
+        return list;
     }
 
     @GetMapping("/{id}")
