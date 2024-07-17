@@ -37,9 +37,17 @@ const Label = styled.label`
 const Input = styled.input`
     padding: 10px;
     font-size: 1rem;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    width: 90%;
+    width: 100%;
+`;
+
+const Select = styled.select`
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
 `;
 
 const CheckboxLabel = styled.label`
@@ -76,19 +84,32 @@ const ProductForm = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await axios.get(`/api/products/${id}`);
+                setProduct(response.data);
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        };
+
         if (id) {
-            axios.get(`/api/products/${id}`)
-                .then(response => setProduct(response.data))
-                .catch(error => console.error('Error fetching product:', error));
+            fetchProduct();
         }
     }, [id]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/categories')
-            .then(response => setCategories(response.data))
-            .catch(error => console.error('Error fetching categories:', error));
-    }, []);
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/categories');
+                setCategories(response.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
 
+        fetchCategories();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -135,8 +156,8 @@ const ProductForm = () => {
                 </FormGroup>
                 <FormGroup>
                     <CheckboxLabel>
-                        Available:
                         <CheckboxInput type="checkbox" name="available" checked={product.available} onChange={handleChange} />
+                        Available
                     </CheckboxLabel>
                 </FormGroup>
                 <Button type="submit">{id ? 'Update' : 'Save'}</Button>
