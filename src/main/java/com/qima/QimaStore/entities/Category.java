@@ -1,5 +1,7 @@
 package com.qima.QimaStore.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
 
     @Id
@@ -26,5 +29,4 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
-
 }
