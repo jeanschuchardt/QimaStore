@@ -76,3 +76,10 @@ Located at `com.qima.QimaStore.controllers.AuthController`, this controller mana
 ---
 
 This README provides a basic overview of the QimaStore project, including its structure and main endpoints. For more details, refer to the complete documentation or contact the development team.
+
+## Default Users
+
+By default, there are two users:
+
+- **Admin User**: Username is `admin`, and the password is `adminpassword`.
+- **Regular User**: Username is `user`, and the password is `userpassword`.
