@@ -1,6 +1,7 @@
 package com.qima.QimaStore.controllers;
 
 import com.qima.QimaStore.configs.JwtTokenProvider;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    final private AuthenticationManager authenticationManager;
+    final private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody AuthRequest authRequest) {
@@ -53,6 +52,7 @@ class AuthRequest {
 @Data
 class AuthResponse {
     private String token;
+
     public AuthResponse(String token) {
         this.token = token;
     }

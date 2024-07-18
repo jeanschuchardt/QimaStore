@@ -1,12 +1,15 @@
 package com.qima.QimaStore.configs;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -19,6 +22,11 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private Long validityInMilliseconds;
 
+    @PostConstruct
+    protected void init() {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    }
+
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
@@ -27,19 +35,25 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
     public String createToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Date now = new Date();
+            Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
 
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+            String compact = Jwts.builder()
+                    .setSubject(userDetails.getUsername())
+                    .setIssuedAt(new Date())
+                    .setExpiration(expiryDate)
+                    .signWith(SignatureAlgorithm.HS512, secretKey)
+                    .compact();
+            return compact;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -67,3 +81,4 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 }
+
