@@ -33,7 +33,6 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    // getters and setters
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -6,6 +6,7 @@ import com.qima.QimaStore.repositories.ProductRepository;
 import com.qima.QimaStore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,11 +34,13 @@ public class ProductController {
         return ResponseEntity.ok(productById);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Optional<Product> productOptional = productRepository.findById(id);
@@ -47,7 +50,7 @@ public class ProductController {
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setPrice(productDetails.getPrice());
-//            product.setCategory(productDetails.getCategory());
+            product.setCategoryId(productDetails.getCategoryId());
             product.setAvailable(productDetails.getAvailable());
 
             final Product updatedProduct = productRepository.save(product);
@@ -57,6 +60,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         Optional<Product> product = productRepository.findById(id);

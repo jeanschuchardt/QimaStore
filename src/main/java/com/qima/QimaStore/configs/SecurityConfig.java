@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,6 +31,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
