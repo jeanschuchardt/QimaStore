@@ -25,7 +25,7 @@ const App = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/add-product" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
                     <Route path="/edit-product/:id" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
-                    <Route path="/product/:id" element={<PrivateRoute><ProductDetail /></PrivateRoute>} />
+                    <Route path="/product/:id" element={<ProductDetail />} />
                     <Route path="/login" element={<Login />} />
                 </Routes>
                 <AddProductButton /> {/* Add the floating button */}

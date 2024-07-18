@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getProducts } from '../services/api';
+import { getProducts, deleteProduct } from '../services/api';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -45,6 +45,18 @@ const ActionLinks = styled.div`
             text-decoration: underline;
         }
     }
+
+    button {
+        margin-right: 10px;
+        color: red;
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 `;
 
 const HomePage = () => {
@@ -64,6 +76,15 @@ const HomePage = () => {
 
         fetchProducts();
     }, []);
+
+    const handleDelete = async (productId) => {
+        try {
+            await deleteProduct(productId);
+            setProducts(products.filter(product => product.id !== productId));
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
 
     const getCategoryPath = (categoryChain) => {
         let path = [];
@@ -106,8 +127,12 @@ const HomePage = () => {
                         <td>
                             <ActionLinks>
                                 <Link to={`/product/${product.id}`}>View</Link>
-                                {isAdmin && <Link to={`/edit-product/${product.id}`}>Edit</Link>}
-
+                                {isAdmin && (
+                                    <>
+                                        <Link to={`/edit-product/${product.id}`}>Edit</Link>
+                                        <button onClick={() => handleDelete(product.id)}>Delete</button>
+                                    </>
+                                )}
                             </ActionLinks>
                         </td>
                     </tr>
