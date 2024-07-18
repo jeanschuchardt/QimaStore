@@ -39,7 +39,6 @@ const Navbar = ({ username }) => {
         <NavbarContainer>
             <div>
                 <Link to="/">Home</Link>
-                {/*<Link to="/add-product">Add Product</Link>*/}
                 {!username && <Link to="/login">Login</Link>}
             </div>
             {username && (
