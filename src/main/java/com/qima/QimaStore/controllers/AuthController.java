@@ -48,17 +48,12 @@ public class AuthController {
 class AuthRequest {
     private String username;
     private String password;
-
-    // getters and setters
 }
 
 @Data
 class AuthResponse {
     private String token;
-
     public AuthResponse(String token) {
         this.token = token;
     }
-
-    // getters and setters
 }
