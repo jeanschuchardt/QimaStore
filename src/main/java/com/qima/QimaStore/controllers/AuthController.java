@@ -27,7 +27,8 @@ public class AuthController {
     public Map<String, String> login(@RequestBody AuthRequest authRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(),
+                            authRequest.getPassword())
             );
 
             String token = jwtTokenProvider.createToken(authentication);
