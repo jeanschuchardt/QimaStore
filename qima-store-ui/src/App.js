@@ -1,49 +1,40 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+// App.js
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import HomePage from './components/HomePage';
 import ProductForm from './components/ProductForm';
 import ProductDetail from './components/ProductDetail';
+import Login from './components/Login';
+import PrivateRoute from './components/PrivateRoute';
+import Navbar from './components/Navbar';
+import AddProductButton from './components/AddProductButton';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 
 const AppContainer = styled.div`
-  font-family: 'Arial, sans-serif';
-  padding: 20px;
-`;
-
-const Navbar = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  background-color: #333;
-  padding: 10px;
-  border-radius: 5px;
-
-  a {
-    color: white;
-    text-decoration: none;
-    padding: 0 10px;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+    font-family: 'Arial, sans-serif';
+    padding: 20px;
 `;
 
 const App = () => {
+    const { username } = useContext(AuthContext);
+
     return (
-        <Router>
-            <AppContainer>
-                <Navbar>
-                    <Link to="/">Home</Link>
-                    <Link to="/add-product">Add Product</Link>
-                </Navbar>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/add-product" element={<ProductForm />} />
-                    <Route path="/edit-product/:id" element={<ProductForm />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                </Routes>
-            </AppContainer>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <AppContainer>
+                    <Navbar username={username} />
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/add-product" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
+                        <Route path="/edit-product/:id" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
+                        <Route path="/product/:id" element={<ProductDetail />} />
+                        <Route path="/login" element={<Login />} />
+                    </Routes>
+                    <AddProductButton /> {/* Add the floating button */}
+                </AppContainer>
+            </Router>
+        </AuthProvider>
     );
 };
 
