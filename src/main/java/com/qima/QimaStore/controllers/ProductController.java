@@ -47,7 +47,7 @@ public class ProductController {
             product.setName(productDetails.getName());
             product.setDescription(productDetails.getDescription());
             product.setPrice(productDetails.getPrice());
-            product.setCategoryId(productDetails.getCategoryId());
+//            product.setCategory(productDetails.getCategory());
             product.setAvailable(productDetails.getAvailable());
 
             final Product updatedProduct = productRepository.save(product);
