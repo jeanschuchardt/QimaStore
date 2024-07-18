@@ -83,6 +83,7 @@ const ProductForm = () => {
     const [categories, setCategories] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
+    const token = localStorage.getItem('token'); // Get the token from localStorage
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -131,7 +132,7 @@ const ProductForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const updatedProduct = {
@@ -140,12 +141,16 @@ const ProductForm = () => {
             price: parseFloat(product.price)  // Ensuring the price is a decimal number
         };
 
-        const submitFunction = id ? updateProduct : addProduct;
-        const submitArgs = id ? [id, updatedProduct] : [updatedProduct];
-
-        submitFunction(...submitArgs)
-            .then(() => navigate('/'))
-            .catch(error => console.error('Error saving product:', error));
+        try {
+            if (id) {
+                await updateProduct(id, updatedProduct, token);
+            } else {
+                await addProduct(updatedProduct, token);
+            }
+            navigate('/');
+        } catch (error) {
+            console.error('Error saving product:', error);
+        }
     };
 
     return (

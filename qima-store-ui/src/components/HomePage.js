@@ -49,6 +49,8 @@ const ActionLinks = styled.div`
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
+    const roles = JSON.parse(localStorage.getItem('roles')) || [];
+    const isAdmin = roles.includes('ROLE_ADMIN');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -104,7 +106,8 @@ const HomePage = () => {
                         <td>
                             <ActionLinks>
                                 <Link to={`/product/${product.id}`}>View</Link>
-                                <Link to={`/edit-product/${product.id}`}>Edit</Link>
+                                {isAdmin && <Link to={`/edit-product/${product.id}`}>Edit</Link>}
+
                             </ActionLinks>
                         </td>
                     </tr>

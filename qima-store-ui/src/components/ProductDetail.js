@@ -32,6 +32,7 @@ const ProductDetail = () => {
     const { id } = useParams(); // Obtém o parâmetro 'id' da URL
     const [product, setProduct] = useState(null);
     const navigate = useNavigate();
+    const roles = JSON.parse(localStorage.getItem('roles')) || [];
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -73,6 +74,8 @@ const ProductDetail = () => {
 
     if (!product) return <div>Loading...</div>;
 
+    const isAdmin = roles.includes('ROLE_ADMIN');
+
     return (
         <div className="product-detail">
             <h1>{product.name}</h1>
@@ -80,12 +83,14 @@ const ProductDetail = () => {
             <p className="price">Price: ${product.price}</p>
             <p className="category">Category: {getCategoryPath(product.categoryChain)}</p>
             <p className="availability">Available: {product.available ? 'Yes' : 'No'}</p>
-            <div>
-                <Link to={`/edit-product/${id}`}>
-                    <Button>Edit</Button>
-                </Link>
-                <Button className="delete" onClick={handleDelete}>Delete</Button>
-            </div>
+            {isAdmin && (
+                <div>
+                    <Link to={`/edit-product/${id}`}>
+                        <Button>Edit</Button>
+                    </Link>
+                    <Button className="delete" onClick={handleDelete}>Delete</Button>
+                </div>
+            )}
         </div>
     );
 };
