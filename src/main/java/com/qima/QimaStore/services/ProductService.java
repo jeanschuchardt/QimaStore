@@ -2,7 +2,6 @@ package com.qima.QimaStore.services;
 
 import com.qima.QimaStore.dtos.CategoryAndSubCategoryDTO;
 import com.qima.QimaStore.dtos.ProductDTO;
-import com.qima.QimaStore.entities.Category;
 import com.qima.QimaStore.entities.Product;
 import com.qima.QimaStore.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,7 @@ public class ProductService {
     public ProductDTO getProductById(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
         CategoryAndSubCategoryDTO categoryChain = categoryService.getCategoryChain(product.getCategoryId());
-
         return new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getAvailable(), categoryChain);
-
-
     }
 
     public List<ProductDTO> getAllProducts() {

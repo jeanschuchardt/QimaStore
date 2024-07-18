@@ -1,6 +1,5 @@
 package com.qima.QimaStore.configs;
 
-
 import com.qima.QimaStore.entities.Role;
 import com.qima.QimaStore.entities.User;
 import com.qima.QimaStore.repositories.RoleRepository;
