@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+// components/Login.js
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginContainer = styled.div`
     max-width: 400px;
@@ -51,22 +53,18 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
 
-        const credentials = {
-            username: username,
-            password: password,
-        };
+        const credentials = { username, password };
 
         try {
             const response = await fetch('http://localhost:8080/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials),
             });
 
@@ -77,17 +75,14 @@ const Login = () => {
             const data = await response.json();
 
             if (data.token) {
-                // Armazenar o token, o nome de usuário e as roles e redirecionar
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('username', data.username);
-                localStorage.setItem('roles', JSON.stringify(data.roles));
-                console.log('Stored Roles:', data.roles);
+                login(data.username, data.roles);
                 navigate('/');
             } else {
                 setError('Invalid username or password');
             }
         } catch (error) {
-            setError('Invalid username or password');
+            setError('Failed to login. Please try again.');
         }
     };
 

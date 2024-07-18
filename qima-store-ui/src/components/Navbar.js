@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { AuthContext } from '../context/AuthContext';
 
 const NavbarContainer = styled.nav`
     display: flex;
@@ -24,15 +25,13 @@ const UsernameDisplay = styled.div`
     color: white;
 `;
 
-const Navbar = ({ username }) => {
+const Navbar = () => {
     const navigate = useNavigate();
-    const roles = JSON.parse(localStorage.getItem('roles')) || [];
+    const { username, roles, logout } = useContext(AuthContext);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        localStorage.removeItem('roles');
-        navigate('/login');
+        logout();
+        navigate('/');
     };
 
     return (

@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+// components/AddProductButton.js
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { AuthContext } from '../context/AuthContext';
 
 const FloatingButton = styled.button`
     position: fixed;
@@ -20,8 +22,7 @@ const FloatingButton = styled.button`
 `;
 
 const AddProductButton = () => {
-    const username = localStorage.getItem('username');
-    const roles = JSON.parse(localStorage.getItem('roles')) || [];
+    const { username, roles } = useContext(AuthContext);
     const isAdmin = roles.includes('ROLE_ADMIN');
 
     useEffect(() => {
