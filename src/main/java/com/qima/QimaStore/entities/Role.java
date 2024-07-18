@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
+@Table(name = "roles")
 @Data
 public class Role implements GrantedAuthority {
 
