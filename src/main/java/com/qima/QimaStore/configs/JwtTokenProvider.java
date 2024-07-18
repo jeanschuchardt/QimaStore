@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
-
 @Component
 public class JwtTokenProvider {
 
@@ -27,32 +26,17 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String createToken(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
-    }
-
-    public String createToken(Authentication authentication) {
-        try {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Date now = new Date();
-            Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
-
-            String compact = Jwts.builder()
-                    .setSubject(userDetails.getUsername())
-                    .setIssuedAt(new Date())
-                    .setExpiration(expiryDate)
-                    .signWith(SignatureAlgorithm.HS512, secretKey)
-                    .compact();
-            return compact;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public String getUsernameFromToken(String token) {
