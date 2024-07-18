@@ -79,7 +79,7 @@ const Button = styled.button`
 `;
 
 const ProductForm = () => {
-    const [product, setProduct] = useState({ name: '', description: '', price: 0, categoryChain: { id: '' }, available: false });
+    const [product, setProduct] = useState({ name: '', description: '', price: '', categoryChain: { id: '' }, available: false });
     const [categories, setCategories] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -137,6 +137,7 @@ const ProductForm = () => {
         const updatedProduct = {
             ...product,
             categoryId: product.categoryChain.id,
+            price: parseFloat(product.price)  // Ensuring the price is a decimal number
         };
 
         const submitFunction = id ? updateProduct : addProduct;
@@ -161,7 +162,7 @@ const ProductForm = () => {
                 </FormGroup>
                 <FormGroup>
                     <Label>Price:</Label>
-                    <Input type="number" name="price" value={product.price} onChange={handleChange} />
+                    <Input type="number" step="0.01" name="price" value={product.price} onChange={handleChange} />
                 </FormGroup>
                 <FormGroup>
                     <Label>Category:</Label>

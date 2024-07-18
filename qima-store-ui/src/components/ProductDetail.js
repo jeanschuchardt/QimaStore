@@ -1,11 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { getProductById } from '../services/api';
+import { getProductById, deleteProduct } from '../services/api';
 import './ProductDetail.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Button = styled.button`
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 10px;
+
+    &:hover {
+        background-color: #1c86ee;
+    }
+
+    &.delete {
+        background-color: #ff4d4d;
+
+        &:hover {
+            background-color: #ff1a1a;
+        }
+    }
+`;
 
 const ProductDetail = () => {
     const { id } = useParams(); // Obtém o parâmetro 'id' da URL
     const [product, setProduct] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -36,6 +62,15 @@ const ProductDetail = () => {
         return path.join(' > ');
     };
 
+    const handleDelete = async () => {
+        try {
+            await deleteProduct(id);
+            navigate('/');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
+
     if (!product) return <div>Loading...</div>;
 
     return (
@@ -45,6 +80,12 @@ const ProductDetail = () => {
             <p className="price">Price: ${product.price}</p>
             <p className="category">Category: {getCategoryPath(product.categoryChain)}</p>
             <p className="availability">Available: {product.available ? 'Yes' : 'No'}</p>
+            <div>
+                <Link to={`/edit-product/${id}`}>
+                    <Button>Edit</Button>
+                </Link>
+                <Button className="delete" onClick={handleDelete}>Delete</Button>
+            </div>
         </div>
     );
 };
