@@ -3,15 +3,16 @@ package com.qima.QimaStore.controllers;
 import com.qima.QimaStore.configs.JwtTokenProvider;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class AuthController {
@@ -23,12 +24,22 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken((UserDetails) authentication.getPrincipal());
-        return ResponseEntity.ok(new AuthResponse(token));
+    public Map<String, String> login(@RequestBody AuthRequest authRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            );
+
+            String token = jwtTokenProvider.createToken(authentication);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("username", authRequest.getUsername());
+            response.put("token", token);
+
+            return response;
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Invalid username/password supplied");
+        }
     }
 }
 
