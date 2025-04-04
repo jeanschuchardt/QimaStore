@@ -1,0 +1,80 @@
+// Container geral da tabela
+.table-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 32px auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  padding: 24px;
+}
+
+// Título da tabela
+.table-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #3f51b5; // cor primária do Angular Material
+}
+
+// Estilo da tabela Angular Material
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.mat-header-cell {
+  font-weight: 600;
+  background-color: #f5f5f5;
+  color: #555;
+}
+
+.mat-row:nth-child(even) .mat-cell {
+  background-color: #fafafa;
+}
+
+// Ícones de ação
+.mat-icon-button {
+  transition: transform 0.2s ease;
+}
+
+.mat-icon-button:hover {
+  transform: scale(1.2);
+}
+:host ::ng-deep button.mat-mdc-tooltip-trigger.fab-button {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 56px;
+  min-width: auto;
+  border-radius: 28px !important;
+  background-color: #1976d2 !important;
+  color: white !important;
+  z-index: 1000;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep button.fab-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+:host ::ng-deep .fab-label {
+  font-weight: 500;
+  font-size: 16px;
+}

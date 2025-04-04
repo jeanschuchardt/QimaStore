@@ -1,0 +1,32 @@
+<div class="form-container">
+    <h2>Cadastro de Produto</h2>
+  
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="name" required>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Preço</mat-label>
+        <input matInput type="number" formControlName="price" required>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Categoria</mat-label>
+        <input matInput formControlName="categoryPath">
+      </mat-form-field>
+  
+      <mat-checkbox formControlName="available">Disponível</mat-checkbox>
+  
+      <button mat-raised-button color="primary" type="submit" [disabled]="!productForm.valid">
+        Salvar Produto
+      </button>
+    </form>
+  </div>
+  
