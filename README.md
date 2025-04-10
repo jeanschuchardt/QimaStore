@@ -3,20 +3,22 @@
 
 This project is divided into two parts: **frontend** and **backend**.
 
-- **Frontend**: Developed with React, version 18.
+- **Frontend**: Developed with Angular 19.
 - **Backend**: Developed with Spring Boot 3 and Java 22.
 
 ## Project Structure
 
 ### Frontend
 
-The frontend uses React to create an interactive and responsive user interface. To run the frontend, use the following commands:
+The frontend uses Angular to create an interactive and responsive user interface. To run the frontend, use the following commands:
 
 ```bash
 cd frontend
 npm install
-npm start
+npm run start
 ```
+
+The frontend will run on `http://localhost:4200`.
 
 ### Backend
 
@@ -27,6 +29,8 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
+The backend will run on `http://localhost:8080`.
+
 ## Controllers
 
 ### ProductController
@@ -35,19 +39,19 @@ Located at `com.qima.QimaStore.controllers.ProductController`, this controller m
 
 - **GET /api/products**: Returns a list of all products. (Public)
 - **GET /api/products/{id}**: Returns a specific product by ID. (Public)
-- **POST /api/products**: Creates a new product. (Private, admin only)
-- **PUT /api/products/{id}**: Updates an existing product by ID. (Private, admin only)
-- **DELETE /api/products/{id}**: Deletes a product by ID. (Private, admin only)
+- **POST /api/products**: Creates a new product. (Private, admin only, requires Authorization header)
+- **PUT /api/products/{id}**: Updates an existing product by ID. (Private, admin only, requires Authorization header)
+- **DELETE /api/products/{id}**: Deletes a product by ID. (Private, admin only, requires Authorization header)
 
 ### CategoryController
 
 Located at `com.qima.QimaStore.controllers.CategoryController`, this controller manages operations related to categories.
 
 - **GET /api/categories**: Returns a list of all categories.
-- **GET /api/categories/{id}`**: Returns a specific category by ID.
-- **POST /api/categories**: Creates a new category.
-- **PUT /api/categories/{id}`**: Updates an existing category by ID.
-- **DELETE /api/categories/{id}`**: Deletes a category by ID.
+- **GET /api/categories/{id}**: Returns a specific category by ID.
+- **POST /api/categories**: Creates a new category. (Requires Authorization header)
+- **PUT /api/categories/{id}**: Updates an existing category by ID. (Requires Authorization header)
+- **DELETE /api/categories/{id}**: Deletes a category by ID. (Requires Authorization header)
 
 **Note**: No security rules have been applied to the category endpoints.
 
@@ -60,9 +64,11 @@ Located at `com.qima.QimaStore.controllers.AuthController`, this controller mana
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/qima-store.git
    ```
+
 2. Install the dependencies and start the frontend and backend as described above.
 
 ## Contribution
