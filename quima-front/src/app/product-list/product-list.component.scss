@@ -8,6 +8,11 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   padding: 24px;
+
+  // Adicionado para evitar colisão com botão
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  margin-bottom: 80px;
 }
 
 // Título da tabela
@@ -49,6 +54,8 @@
 .mat-icon-button:hover {
   transform: scale(1.2);
 }
+
+// Botão flutuante customizado
 :host ::ng-deep button.mat-mdc-tooltip-trigger.fab-button {
   position: fixed;
   bottom: 32px;
@@ -77,4 +84,23 @@
 :host ::ng-deep .fab-label {
   font-weight: 500;
   font-size: 16px;
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .table-container {
+    max-height: calc(100vh - 180px);
+    margin-bottom: 100px;
+  }
+
+  :host ::ng-deep button.fab-button {
+    bottom: 24px;
+    right: 24px;
+    font-size: 14px;
+    height: 48px;
+  }
+
+  :host ::ng-deep .fab-label {
+    font-size: 14px;
+  }
 }
