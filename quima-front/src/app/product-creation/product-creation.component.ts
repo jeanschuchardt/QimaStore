@@ -64,7 +64,7 @@ export class ProductCreationComponent implements OnInit {
         this.productService.getById(+id).subscribe(product => {
           this.productToEdit = product;
 
-          // ✅ Pegando o ID da categoria mais específica diretamente
+          // ✅ Pegando o ID da category mais específica diretamente
           const categoryId = product.categoryChain?.id ?? null;
 
           this.productForm.patchValue({
@@ -86,12 +86,12 @@ export class ProductCreationComponent implements OnInit {
 
     if (this.productToEdit) {
       this.productService.update(this.productToEdit.id, formValue).subscribe(() => {
-        this.snackBar.open('Produto atualizado com sucesso!', 'Fechar', { duration: 3000 });
+        this.snackBar.open('product atualizado com sucesso!', 'Fechar', { duration: 3000 });
         this.router.navigate(['/']);
       });
     } else {
       this.productService.create(formValue).subscribe(() => {
-        this.snackBar.open('Produto criado com sucesso!', 'Fechar', { duration: 3000 });
+        this.snackBar.open('product criado com sucesso!', 'Fechar', { duration: 3000 });
         this.router.navigate(['/']);
       });
     }

@@ -33,7 +33,7 @@ export class ProductService {
   public products$ = this._products$.asObservable();
 
   constructor() {
-    this.loadProducts(); // ✅ já busca os produtos assim que o serviço é criado
+    this.loadProducts(); // ✅ já busca os products assim que o serviço é criado
   }
   
 

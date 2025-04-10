@@ -44,7 +44,7 @@ export class ProductListComponent implements OnInit {
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe({
       next: () => {
-        this.snackBar.open('Produto removido com sucesso!', 'Fechar', {
+        this.snackBar.open('product removido com sucesso!', 'Fechar', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top'
@@ -54,8 +54,8 @@ export class ProductListComponent implements OnInit {
       },
       error: (err) => {
         const msg = err.status === 404
-          ? 'Produto já foi removido anteriormente.'
-          : 'Erro ao deletar produto.';
+          ? 'product já foi removido anteriormente.'
+          : 'Erro ao deletar product.';
         this.snackBar.open(msg, 'Fechar', {
           duration: 3000,
           horizontalPosition: 'center',

@@ -45,7 +45,7 @@ export class LoginComponent {
           this.router.navigate(['/']);
         },
         error: (err: any) => {
-          alert('Login inválido.');
+          alert('login inválido.');
         }
       });
      
