@@ -1,4 +1,13 @@
 
+  <mat-toolbar color="primary">
+    <span class="app-title">QUIMA</span>
+    <span class="spacer"></span>
+    <span>Olá, {{ authService.getUsername() }}</span>
+    <button mat-button (click)="logout()">Sair</button>
+  </mat-toolbar>
+
+
 <router-outlet></router-outlet>
+  
 
 
