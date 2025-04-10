@@ -1,80 +1,77 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { ProductService, Product } from '../services/product.service';
+import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
-
-import { ProductCreationComponent } from '../product-creation/product-creation.component';
-import { ProductService, Product } from '../services/product.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatTableModule,
     MatIconModule,
+    MatButtonModule,
     MatTooltipModule,
-    RouterModule,
-    ProductCreationComponent,
-    NgIf
+    MatSnackBarModule
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
+
+  products$: Observable<Product[]>;  // ✅ declarada aqui, inicializada no construtor
+
   displayedColumns: string[] = ['id', 'name', 'description', 'price', 'categoryPath', 'available', 'actions'];
-  products: Product[] = [];
-  selectedProduct?: Product;
 
   constructor(
     private productService: ProductService,
-    private router: Router
-  ) {}
+    private snackBar: MatSnackBar
+  ) {
+    this.products$ = this.productService.products$;  // ✅ inicialização correta aqui!
+  }
 
-  ngOnInit() {
-    // Escuta atualizações de produtos
-    this.productService.products$.subscribe((prodList: Product[]) => {
-      this.products = prodList;
-    });
-
-    // Recarrega produtos ao voltar para /products
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        if (event.urlAfterRedirects === '/') {
-          this.productService.loadProducts();
-        }
-      });
+  ngOnInit(): void {
+    this.productService.loadProducts();
   }
 
   deleteProduct(id: number) {
-    this.productService.deleteProduct(id);
-    console.log('Produto removido com ID:', id);
-  }
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.snackBar.open('Produto removido com sucesso!', 'Fechar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
 
-  editProduct(product: Product) {
-    this.selectedProduct = product;
-  }
-
-  onFormSubmitted() {
-    this.selectedProduct = undefined;
+        this.productService.loadProducts();
+      },
+      error: (err) => {
+        const msg = err.status === 404
+          ? 'Produto já foi removido anteriormente.'
+          : 'Erro ao deletar produto.';
+        this.snackBar.open(msg, 'Fechar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
+    });
   }
 
   buildCategoryPath(category: any): string {
     const path: string[] = [];
-
-    function traverse(cat: any) {
-      if (!cat) return;
-      if (cat.subcategories?.length) {
-        traverse(cat.subcategories[0]);
-      }
-      path.unshift(cat.name);
+    let current = category;
+    while (current) {
+      path.unshift(current.name);
+      current = current.subcategories?.[0];
     }
-
-    traverse(category);
     return path.join(' > ');
   }
 }

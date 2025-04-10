@@ -59,11 +59,8 @@ export class ProductService {
     return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
   }
 
-  deleteProduct(id: number): void {
-    this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe(() => {
-      // Após deletar, recarrega a lista
-      this.loadProducts();
-    });
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   buildCategoryPath(category: any): string {
