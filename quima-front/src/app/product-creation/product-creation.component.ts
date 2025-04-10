@@ -64,9 +64,8 @@ export class ProductCreationComponent implements OnInit {
         this.productService.getById(+id).subscribe(product => {
           this.productToEdit = product;
 
-          const categoryId = product.categoryChain
-            ? this.extractLastCategoryId(product.categoryChain)
-            : product.categoryId;
+          // ✅ Pegando o ID da categoria mais específica diretamente
+          const categoryId = product.categoryChain?.id ?? null;
 
           this.productForm.patchValue({
             name: product.name,
@@ -110,13 +109,6 @@ export class ProductCreationComponent implements OnInit {
     }
 
     return result;
-  }
-
-  extractLastCategoryId(category: Category): number | null {
-    while (category?.subcategories && category.subcategories.length) {
-      category = category.subcategories[0];
-    }
-    return category?.id || null;
   }
 
   indentCategory(level: number = 0): string {
