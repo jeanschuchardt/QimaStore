@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router,RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from './services/auth.service';
@@ -10,7 +10,8 @@ import { AuthService } from './services/auth.service';
   imports: [
     RouterOutlet,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -19,7 +20,9 @@ export class AppComponent {
   constructor(
     public authService: AuthService,
     private router: Router
-  ) { console.log('Está logado?', this.authService.isLoggedIn());}
+  ) { 
+    console.log('Está logado?', this.authService.isLoggedIn());
+  }
 
   logout(): void {
     this.authService.logout();
