@@ -1,46 +1,80 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService, Product } from '../product.service';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { ProductCreationComponent } from '../product-creation/product-creation.component';
-import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
+import { ProductCreationComponent } from '../product-creation/product-creation.component';
+import { ProductService, Product } from '../services/product.service';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule,ProductCreationComponent, NgIf,RouterModule,MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatIconModule,
+    MatTooltipModule,
+    RouterModule,
+    ProductCreationComponent,
+    NgIf
+  ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'description', 'price', 'categoryPath', 'available', 'actions'];
-
   products: Product[] = [];
-
   selectedProduct?: Product;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.productService.products$.subscribe(prodList => {
+    // Escuta atualizações de produtos
+    this.productService.products$.subscribe((prodList: Product[]) => {
       this.products = prodList;
     });
+
+    // Recarrega produtos ao voltar para /products
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects === '/') {
+          this.productService.loadProducts();
+        }
+      });
   }
 
-  editProduct(product: Product) {
-    console.log('Editar produto:', product);
-    this.selectedProduct = product;
-    // Aqui você pode emitir um evento, navegar para outra rota ou abrir um modal
-  }
-  
   deleteProduct(id: number) {
     this.productService.deleteProduct(id);
     console.log('Produto removido com ID:', id);
-  }                                                                                                                         
-  
+  }
+
+  editProduct(product: Product) {
+    this.selectedProduct = product;
+  }
+
   onFormSubmitted() {
     this.selectedProduct = undefined;
+  }
+
+  buildCategoryPath(category: any): string {
+    const path: string[] = [];
+
+    function traverse(cat: any) {
+      if (!cat) return;
+      if (cat.subcategories?.length) {
+        traverse(cat.subcategories[0]);
+      }
+      path.unshift(cat.name);
+    }
+
+    traverse(category);
+    return path.join(' > ');
   }
 }

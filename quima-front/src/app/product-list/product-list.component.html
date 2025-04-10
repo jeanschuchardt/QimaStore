@@ -31,7 +31,9 @@
       <!-- Category Path Column -->
       <ng-container matColumnDef="categoryPath">
         <th mat-header-cell *matHeaderCellDef> Category </th>
-        <td mat-cell *matCellDef="let product"> {{ product.categoryPath }} </td>
+        <td mat-cell *matCellDef="let product">
+          {{ buildCategoryPath(product.categoryChain) }}
+        </td>
       </ng-container>
 
       <!-- Available Column -->
@@ -47,10 +49,10 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let product">
-          <button mat-icon-button [routerLink]="['/products/edit', product.id]" color="primary">
+          <button mat-icon-button [routerLink]="['/products/edit', product.id]" color="primary" matTooltip="Editar">
             <mat-icon>edit</mat-icon>
-          </button>          
-          <button mat-icon-button color="warn" (click)="deleteProduct(product.id)">
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteProduct(product.id)" matTooltip="Remover">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
@@ -62,7 +64,7 @@
   </div>
 </form>
 
-<!-- fora do form ou da div table-container -->
+<!-- Botão flutuante para adicionar novo produto -->
 <button
   mat-fab
   color="primary"
