@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductListComponent implements OnInit {
 
-  products$: Observable<Product[]>;  // ✅ declarada aqui, inicializada no construtor
+  products$: Observable<Product[]>; 
 
   displayedColumns: string[] = ['id', 'name', 'description', 'price', 'categoryPath', 'available', 'actions'];
 
@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private snackBar: MatSnackBar
   ) {
-    this.products$ = this.productService.products$;  // ✅ inicialização correta aqui!
+    this.products$ = this.productService.products$;
   }
 
   ngOnInit(): void {

@@ -1,10 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { CategoryService } from './category.service';
-
-
 
 export interface Category {
   id: number;
@@ -18,9 +14,9 @@ export interface Product {
   description: string;
   price: number;
   available: boolean;
-  categoryPath?: string; // se ainda estiver usando
-  categoryId?: number; // usado no form
-  categoryChain?: Category; // ✅ adicione este campo opcional
+  categoryPath?: string; 
+  categoryId?: number; 
+  categoryChain?: Category; 
 }
 @Injectable({
   providedIn: 'root'
@@ -33,7 +29,7 @@ export class ProductService {
   public products$ = this._products$.asObservable();
 
   constructor() {
-    this.loadProducts(); // ✅ já busca os products assim que o serviço é criado
+    this.loadProducts(); 
   }
   
 
@@ -69,9 +65,9 @@ export class ProductService {
     function traverse(cat: any) {
       if (!cat) return;
       if (cat.subcategories?.length) {
-        traverse(cat.subcategories[0]); // usa apenas o primeiro caminho da árvore
+        traverse(cat.subcategories[0]); 
       }
-      path.unshift(cat.name); // insere no início para montar do nível mais alto ao mais baixo
+      path.unshift(cat.name);
     }
   
     traverse(category);

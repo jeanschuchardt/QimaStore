@@ -12,7 +12,7 @@ export class AuthService {
     return this.http.post(this.apiUrl, credentials);
   }
 
-  // Salva o token, nome de usuário e roles
+
   storeSessionData(data: { token: string; username: string; roles: string[] }): void {
     localStorage.setItem('jwt', data.token);
     localStorage.setItem('username', data.username);

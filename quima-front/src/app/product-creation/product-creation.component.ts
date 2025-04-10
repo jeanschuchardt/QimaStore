@@ -64,7 +64,6 @@ export class ProductCreationComponent implements OnInit {
         this.productService.getById(+id).subscribe(product => {
           this.productToEdit = product;
 
-          // ✅ Pegando o ID da category mais específica diretamente
           const categoryId = product.categoryChain?.id ?? null;
 
           this.productForm.patchValue({

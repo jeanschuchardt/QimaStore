@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export interface Category {
   id: number;
   name: string;
-  subcategories?: Category[]; // ← adicionado "?" para indicar que pode ser opcional
+  subcategories?: Category[]; 
 }
 
 @Injectable({
